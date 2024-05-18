@@ -1,0 +1,38 @@
+#friendlii-area{
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    pointer-events: none;
+    z-index: 9999;
+    background-color: transparent;
+    
+    width: 100vw;
+    height: 100vh;
+    
+    padding: 0;
+    margin: 0;
+}
+
+#friendlii-area * {
+    padding: 0;
+    margin: 0;
+}
+
+.friendlii-entity{
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    height: 100px;
+    width: 100px;
+
+    background-color: rgb(203, 148, 255);
+
+    pointer-events: all;
+    /* background-color: wheat; */
+
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
