@@ -12,12 +12,17 @@
     ],
     "host_permissions": ["<all_urls>"],
     "web_accessible_resources":[{
-        "resources": ["/app/*"],
+        "resources": ["/app/*", "/images/*"],
         "matches": ["<all_urls>"]
     }],
     "background": {
         "service_worker": "./app/background/background.js",
         "type": "module"
+    },
+    "icons": {
+        "16": "./images/default_icon.png",
+        "48": "./images/default_icon.png",
+        "128": "./images/default_icon.png"
     },
     "action": {
         "default_popup": "./app/popup/popup.html"
