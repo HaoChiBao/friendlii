@@ -19,6 +19,7 @@ const client_rooms = {
         ],
     },
 }
+
 // Broadcast to all connected clients, except the sender
 function broadcast(ws, message) {
     wss.clients.forEach((client) => {
@@ -61,13 +62,14 @@ class UserPhysics extends Physics{
     async update(){
         if(true){ //verify websocket connection
             try{
+
                 // update the user data
-                // console.log(this.position)
-                this.user_entity.ws.send(JSON.stringify({
-                    action: 'update',
-                    data: this.position,
-                    timeStamp: Date.now()
-                }))
+                // this.user_entity.ws.send(JSON.stringify({
+                //     action: 'update',
+                //     data: this.position,
+                //     timeStamp: Date.now()
+                // }))
+
             } catch(e) {
                 console.log(e)
             }
@@ -128,7 +130,7 @@ class UserPhysics extends Physics{
             Entity.all_entities.forEach((entity, i) => {
                 // console.log(Entity.all_entities)
 
-                return
+                // return
                 entity.ws.send(JSON.stringify(
                     {
                         action: 'update',
@@ -138,9 +140,11 @@ class UserPhysics extends Physics{
                                 id: entity.id,
                                 position: entity.physics.position,
                             }
-                        })
+                        }),
+                        timeStamp: Date.now()
                     }
                 ))
+
             })
         }, 1000 / Physics.fps); // loops every 1/fps seconds
     }
@@ -162,7 +166,7 @@ wss.on('connection', (ws) => {
         // send as buffer
         JSON.stringify({
             action: 'Welcome',
-            data: ('Welcome to the WebSocket server! Your id is ' + ws.id),
+            data: ws.id,
         })
     );
     

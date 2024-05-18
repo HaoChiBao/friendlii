@@ -33,6 +33,7 @@
     background-color: #8eb4ff; */
 
     pointer-events: all;
+    cursor: pointer;
     /* background-color: wheat; */
 
     border-radius: 10px;
@@ -44,7 +45,7 @@
 }
 
 .friendlii-information{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     

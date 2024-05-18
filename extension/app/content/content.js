@@ -2,8 +2,12 @@ console.log('Friendlii')
 
 const createFriendliiArea = () => {
     const friendlii_area = document.createElement('div')
-    friendlii_area.id = 'friendlii-area'
+    friendlii_area.id = 'friendlii-area'    
+    document.body.appendChild(friendlii_area)
+    return friendlii_area
+}
 
+const createFriendliiInfo = () => {
     const information = document.createElement('div')
     information.className = 'friendlii-information'
 
@@ -18,18 +22,16 @@ const createFriendliiArea = () => {
     information.appendChild(connected_indicator)
     information.appendChild(ping_display)
 
-    friendlii_area.appendChild(information)
-    
-    document.body.appendChild(friendlii_area)
-    return friendlii_area
+    document.body.appendChild(information)
+    return information
 }
 
-const createFriendliiUser = (area_element) => {
+const createFriendliiUser = (area_element, id) => {
     const friendlii_user = document.createElement('div')
     friendlii_user.className = 'friendlii-entity'
+    friendlii_user.id = id
     area_element.appendChild(friendlii_user)
     return friendlii_user
-
 }
 
 let pings = [/* average of 10 pings */]
@@ -58,11 +60,16 @@ serverAddress = 'wss://friendlii-470eb93cf55e.herokuapp.com/';
 let ws = null;
 
 
+const info_element = createFriendliiInfo()
+
 const area_element = createFriendliiArea()
 const user_element = createFriendliiUser(area_element)
-const hideUser_element = () => {user_element.style.display = 'none'}
-const showUser_element = () => {user_element.style.display = 'block'}
-hideUser_element()
+let id = '' // this will change when the user connects to the server
+
+const hideUser_elements = () => {area_element.style.display = 'none'}
+const showUser_elements = () => {area_element.style.display = 'block'}
+hideUser_elements()
+
 
 const initiate_WS = async () => {
     // close the existing connection
@@ -80,16 +87,18 @@ const initiate_WS = async () => {
             type: 'test'
         }
 
-        showUser_element()
+        showUser_elements()
         setConnectedStatus('CONNECTED')
 
         ws.send(JSON.stringify(test));
     };
+
     ws.onclose = () => {
         console.log('Connection closed')
-        hideUser_element()
+        hideUser_elements()
         setConnectedStatus('NOT connected')
     }
+
     ws.onmessage = (e) => {
         try {
             const message = JSON.parse(e.data)
@@ -98,11 +107,14 @@ const initiate_WS = async () => {
 
             const timeStamp = message.timeStamp
             const ping = Date.now() - timeStamp
+            // console.log(message)
             setPing(ping)
 
             switch (action) {
                 case 'Welcome':
                     console.log('Welcome:', data)
+                    id = data
+                    user_element.id = id
                     break
                 case 'ping':
                     // console.log('ping:', Date.now() - timeStamp)
@@ -110,8 +122,23 @@ const initiate_WS = async () => {
                 case 'update':
                     // console.log('update:', data)
                     // console.log('ping:', Date.now() - timeStamp)
-                    user_element.style.left = `${data.x}px`
-                    user_element.style.bottom = `${data.y}px`
+
+                    data.forEach((user) => {
+                        const user_id = user.id
+                        const user_pos = user.position
+
+                        let curr_user_element = document.getElementById(user_id)
+                        if(curr_user_element === null) {
+                            curr_user_element = createFriendliiUser(area_element, user_id)
+                        }
+                        curr_user_element.style.left = `${user_pos.x}px`
+                        curr_user_element.style.bottom = `${user_pos.y}px`
+                    });
+
+                    setPing(ping)
+
+                    // user_element.style.left = `${data.x}px`
+                    // user_element.style.bottom = `${data.y}px`
                     break
                 default:
                     console.log('Message:', message)
@@ -144,6 +171,8 @@ const main = async () => {
     user_element.addEventListener('click', (e) => {
         e.stopPropagation()
         e.preventDefault()
+
+        console.log('User Clicked')
         userActive = !userActive
         if(userActive){
             user_element.style.backgroundColor = '#8eb4ff'
