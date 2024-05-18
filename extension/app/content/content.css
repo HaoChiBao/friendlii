@@ -29,10 +29,37 @@
     width: 100px;
 
     background-color: rgb(203, 148, 255);
+    /* background-color: #ffa2a2;
+    background-color: #8eb4ff; */
 
     pointer-events: all;
     /* background-color: wheat; */
 
     border-radius: 10px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+
+    transition: all 40ms;
+    /* transition: all 30ms; */
+    /* transition: all 0.5s; */
+}
+
+.friendlii-information{
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    padding: 5px 10px !important;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    background-color: black;
+    border-radius: 10px;
+
+    gap: 10px;
+}
+
+.friendlli-ping-display{
+    color: greenyellow;
 }
