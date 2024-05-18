@@ -32,10 +32,15 @@ function broadcast(ws, message) {
 // user physics
 class UserEntity extends Entity {
 
-    constructor(width = 100, height = 100, id, ws = null){
+    constructor(width = 100, height = 100, id, ws = null, skin = 0){
         super(width, height, id);
         this.init()
+        
         this.ws = ws
+
+        this.skin = skin
+        this.animationFrame = 0
+        this.facingLeft = true
     }
     
     async init(){
@@ -69,6 +74,9 @@ class UserPhysics extends Physics{
                 //     data: this.position,
                 //     timeStamp: Date.now()
                 // }))
+                if(this.velocity.x > 0) this.user_entity.facingLeft = false
+                if(this.velocity.x < 0) this.user_entity.facingLeft = true
+                // console.log(this.user_entity.facingLeft)
 
             } catch(e) {
                 console.log(e)
@@ -139,6 +147,9 @@ class UserPhysics extends Physics{
                             return {
                                 id: entity.id,
                                 position: entity.physics.position,
+                                skin: entity.skin,
+                                animationFrame: entity.animationFrame,
+                                facingLeft: entity.facingLeft,
                             }
                         }),
                         timeStamp: Date.now()
@@ -178,11 +189,13 @@ wss.on('connection', (ws) => {
             case 'keyControls':
                 entity.physics.keyControls = data
                 break
+            case 'connect':
+                entity.skin = data.skin
+                break
         }
         
-        // console.log(`Received message: ${message} from client: ${ws.id}`);
-        console.log(`message from client: ${ws.id}`);
-        
+        // console.log(`message from client: ${ws.id}`);
+    
         // Broadcast the message to all clients
         // broadcast(ws, message);
     });
@@ -193,6 +206,18 @@ wss.on('connection', (ws) => {
         // remove client from defaultRoom
         client_rooms[room].clients = client_rooms[room].clients.filter((client) => client !== ws.id);
         entity.delete()
+
+        // Broadcast the message to all clients
+        client_rooms[room].clients.forEach((client) => {
+            client.send(
+                JSON.stringify({
+                    action: 'user_disconnect',
+                    data: ws.id,
+                    timeStamp: Date.now()
+                })
+            );
+        });
+
     });
     
 });

@@ -9,9 +9,9 @@ class Physics {
     // determines how many times the physics loop runs per second
     static fps = 24;
 
-    static fps = 32;
+    // static fps = 32;
     // static fps = 45;
-    static fps = 60;
+    // static fps = 60;
 
     // Most laptops do not have sufficient resourses to run at 144 fps
     // static fps = 144;

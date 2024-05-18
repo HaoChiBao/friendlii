@@ -35,6 +35,11 @@ const createFriendliiUser = (area_element, id) => {
     const friendlii_user = document.createElement('div')
     friendlii_user.className = 'friendlii-entity'
     friendlii_user.id = id
+
+    const img = document.createElement('img')
+    img.src = ''
+    friendlii_user.appendChild(img)
+
     area_element.appendChild(friendlii_user)
     return friendlii_user
 }
@@ -64,16 +69,47 @@ const setConnectedStatus = (status) => {
     connected_indicator.innerHTML = status
 }
 
-let serverAddress = 'wss://haochibao-websocket.glitch.me/';
+
+// change animation frame
+const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLeft = true) => {
+    const img = element.querySelector('img')
+    let path = 'default'
+    console.log(facingLeft)
+    if (!facingLeft) element.style.transform = 'scaleX(-1)'
+    else element.style.transform = 'scaleX(1)'
+
+    switch(skin){
+        case 0:
+            // check if the src is the same
+            if(img.src === await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)) return
+            else img.src = await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)
+
+            break;
+        case 1:
+            path = 'hawkhacks'
+            break;
+        case 2:
+            break;
+    }
+}
+
+
+// websocket connection
+
+let serverAddress = 'wss://friendlii-470eb93cf55e.herokuapp.com/';
 serverAddress = 'ws://localhost:3000/';
-serverAddress = 'wss://friendlii-470eb93cf55e.herokuapp.com/';
 let ws = null;
 
-
+// elements
 const info_element = createFriendliiInfo()
-
 const area_element = createFriendliiArea()
 const user_element = createFriendliiUser(area_element)
+/* 
+    0 - default
+    1 - hawkhacks
+    2 - duck
+*/
+let skin = 0 
 let id = '' // this will change when the user connects to the server
 
 const hideUser_elements = () => {area_element.style.display = 'none'}
@@ -92,15 +128,17 @@ const initiate_WS = async () => {
     ws.onopen = () => {
         console.log('Connected to the server');
         // ws.send('Hello from the client!');
-        const test = {
-            test: 'Hello from the cool!',
-            type: 'test'
+        const userDetails = {
+            action: 'connect',
+            data: {
+                skin
+            }
         }
 
         showUser_elements()
         setConnectedStatus('CONNECTED')
 
-        ws.send(JSON.stringify(test));
+        ws.send(JSON.stringify(userDetails));
     };
 
     ws.onclose = () => {
@@ -126,8 +164,10 @@ const initiate_WS = async () => {
                     id = data
                     user_element.id = id
                     break
-                case 'ping':
-                    // console.log('ping:', Date.now() - timeStamp)
+                case 'user_disconnect':
+                    const disconnected_user_id = data
+                    const disconnected_user_element = document.getElementById(disconnected_user_id)
+                    if(disconnected_user_element !== null) disconnected_user_element.remove()
                     break
                 case 'update':
                     // console.log('update:', data)
@@ -136,6 +176,9 @@ const initiate_WS = async () => {
                     data.forEach((user) => {
                         const user_id = user.id
                         const user_pos = user.position
+                        const user_skin = user.skin
+                        const user_animationFrame = user.animationFrame
+                        const user_facingLeft = user.facingLeft
 
                         let curr_user_element = document.getElementById(user_id)
                         if(curr_user_element === null) {
@@ -143,6 +186,8 @@ const initiate_WS = async () => {
                         }
                         curr_user_element.style.left = `${user_pos.x}px`
                         curr_user_element.style.bottom = `${user_pos.y}px`
+
+                        setAnimationFrame(curr_user_element, user_animationFrame, user_skin, user_facingLeft)
                     });
                     setUsersAmount(data.length)
                     setPing(ping)
@@ -185,15 +230,15 @@ const main = async () => {
         console.log('User Clicked')
         userActive = !userActive
         if(userActive){
-            user_element.style.backgroundColor = '#8eb4ff'
+            user_element.style.border = '#8eb4ff 2px solid'
         } else {
-            user_element.style.backgroundColor = '#ffa2a2'
+            user_element.style.border = '#ffa2a2 2px solid'
         }
     })
     
     window.addEventListener('click', () => {
         userActive = false
-        user_element.style.backgroundColor = '#ffa2a2'
+        user_element.style.border = '#ffa2a2 2px solid'
     })
 
     window.addEventListener('keydown', (e) => {

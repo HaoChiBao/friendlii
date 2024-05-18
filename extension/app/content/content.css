@@ -23,27 +23,39 @@
 
 .friendlii-entity{
     position: absolute;
-
+    
     left: 0;
     bottom: 0;
-
+    
+    /* height: 100px;
+    width: 100px; */
     height: 100px;
     width: 100px;
-
+    
     background-color: rgb(203, 148, 255);
-    /* background-color: #ffa2a2;
-    background-color: #8eb4ff; */
-
+    background-color: transparent;
+    
     pointer-events: all;
     cursor: pointer;
     /* background-color: wheat; */
-
+    
     border-radius: 10px;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-
+    /* box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5); */
+    
     transition: all 40ms;
     /* transition: all 30ms; */
     /* transition: all 0.5s; */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.friendlii-entity img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .friendlii-information{
