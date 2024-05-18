@@ -14,12 +14,17 @@ const createFriendliiInfo = () => {
     const connected_indicator = document.createElement('div')
     connected_indicator.className = 'friendlii-connected-indicator'
     connected_indicator.innerHTML = 'NOT connected'
+
+    const users_amount = document.createElement('div')
+    users_amount.className = 'friendlii-users-amount'
+    users_amount.innerHTML = 'Users: 0'
     
     const ping_display = document.createElement('div')
     ping_display.className = 'friendlli-ping-display'
     ping_display.innerHTML = 'Ping: 0'
 
     information.appendChild(connected_indicator)
+    information.appendChild(users_amount)
     information.appendChild(ping_display)
 
     document.body.appendChild(information)
@@ -49,6 +54,11 @@ const setPing = (ping) => {
     }
 }
 
+const setUsersAmount = (amount) => {
+    const users_amount = document.querySelector('.friendlii-users-amount')
+    users_amount.innerHTML = `Users: ${amount}`
+}
+
 const setConnectedStatus = (status) => {
     const connected_indicator = document.querySelector('.friendlii-connected-indicator')
     connected_indicator.innerHTML = status
@@ -73,7 +83,7 @@ hideUser_elements()
 
 const initiate_WS = async () => {
     // close the existing connection
-    if (ws !== null) ws.close()
+    if (ws !== null) await ws.close()
 
     ws = new WebSocket(serverAddress);
     console.log('Connecting to the server...')
@@ -134,7 +144,7 @@ const initiate_WS = async () => {
                         curr_user_element.style.left = `${user_pos.x}px`
                         curr_user_element.style.bottom = `${user_pos.y}px`
                     });
-
+                    setUsersAmount(data.length)
                     setPing(ping)
 
                     // user_element.style.left = `${data.x}px`
@@ -213,13 +223,15 @@ const main = async () => {
         }
 
         try{
-            if(ws === null) return 
+            if(ws === null) return
+            if(ws.readyState !== 1) return
             ws.send(JSON.stringify({
                 action: 'keyControls',
                 data: keyControls
             }))
         } catch(e) {
-            // console.error(e)
+            console.log('Error:')
+            console.log(e)
         }
     });
     
@@ -250,12 +262,14 @@ const main = async () => {
 
         try{
             if(ws === null) return 
+            if(ws.readyState !== 1) return
             ws.send(JSON.stringify({
                 action: 'keyControls',
                 data: keyControls
             }))
         }catch(e){
-            // console.error(e)
+            console.log('Error:')
+            console.log(e)
         }
     })
 

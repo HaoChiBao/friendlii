@@ -1,3 +1,5 @@
+@font-face {font-family: 'GTWalsheimPro-Regular';src: url('https://cdn.shopify.com/s/files/1/0588/4228/4186/files/GTWalsheimPro-Regular.woff?v=1669253354') format('woff');} 
+
 #friendlii-area{
     position: fixed;
     top: 0;
@@ -50,6 +52,9 @@
     left: 0;
     
     padding: 5px 10px !important;
+
+    color: white;
+    font-family: 'GTWalsheimPro-Regular', sans-serif;
     
     display: flex;
     justify-content: center;
@@ -59,8 +64,9 @@
     border-radius: 10px;
 
     gap: 10px;
+
 }
 
 .friendlli-ping-display{
-    color: greenyellow;
+    color: greenyellow !important;
 }
