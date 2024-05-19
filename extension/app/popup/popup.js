@@ -39,9 +39,12 @@ const main = async () => {
         sendToContent(message)
     })
     // testing ______________________________
-    const test = document.querySelector('#test')
-    test.addEventListener('click', async () => {
-        const message = {action: 'test'}
+    const startTimer = document.querySelector('#startTimer')
+    startTimer.addEventListener('click', async () => {
+        const message = {
+            action: 'startTimer',
+            data: 30
+        }
         sendToContent(message)
     })
 }

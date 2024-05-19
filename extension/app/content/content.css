@@ -72,6 +72,28 @@
     backdrop-filter: blur(10px);
 }
 
+.friendlii-timer{
+
+    display: flex;
+    color: black;
+    font-family: 'GTWalsheimPro-Regular', sans-serif;
+
+    position: fixed;
+    right: 0;
+    top: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 5px;
+    padding-bottom: 0px;
+    border-radius: 20px;
+
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
 .friendlii-edit-menu button{
     background-color: rgb(235, 235, 235);
     opacity: 0.5;

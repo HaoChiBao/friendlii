@@ -3,6 +3,7 @@ const {Entity, StaticEntity, Physics} = require('./util/entity.js')
 // websocket express server
 const express = require('express');
 const http = require('http');
+const { start } = require('repl');
 const WebSocket = require('ws');
 
 const app = express();
@@ -14,6 +15,10 @@ app.use(express.static('public'));
 
 const client_rooms = {
     defaultRoom: {
+        timer:{
+            loop: null,
+            time_elapsed: 0,
+        },
         clients: [
             // list of client ids
         ],
@@ -181,6 +186,60 @@ class UserPhysics extends Physics{
     }
 }
 
+
+const startTimer = (time) => {
+    clearInterval(client_rooms.defaultRoom.timer.loop)
+
+    if(client_rooms.defaultRoom.timer.loop !== null) return
+    client_rooms.defaultRoom.timer.time_elapsed = time
+
+    client_rooms.defaultRoom.timer.loop = setInterval(() => {
+
+        client_rooms.defaultRoom.timer.time_elapsed -= 1
+
+        if(client_rooms.defaultRoom.timer.time_elapsed <= 0){
+            clearInterval(client_rooms.defaultRoom.timer.loop)
+            client_rooms.defaultRoom.timer.loop = null
+            client_rooms.defaultRoom.timer.time_elapsed = 0
+        }
+
+        client_rooms.defaultRoom.clients.forEach((client) => {
+            client.send(
+                JSON.stringify({
+                    action: 'updateTimer',
+                    data: {
+                        time_elapsed: client_rooms.defaultRoom.timer.time_elapsed,
+                    },
+                    timeStamp: Date.now()
+                })
+            );
+        });
+
+    }, 1000)
+
+}
+
+const stopTimer = () => {
+    if(client_rooms.defaultRoom.timer.loop === null) return
+
+    clearInterval(client_rooms.defaultRoom.timer.loop)
+    client_rooms.defaultRoom.timer.loop = null
+    client_rooms.defaultRoom.timer.time_elapsed = 0
+
+    client_rooms.defaultRoom.clients.forEach((client) => {
+        client.send(
+            JSON.stringify({
+                // action: 'timer',
+                // data: {
+                //     time_elapsed: client_rooms.defaultRoom.timer.time_elapsed,
+                //     max_time: client_rooms.defaultRoom.timer.max_time,
+                // },
+                // timeStamp: Date.now()
+            })
+        );
+    });
+}
+
 // WebSocket connection handling
 wss.on('connection', (ws) => {
     // generate unique id for each client
@@ -215,6 +274,12 @@ wss.on('connection', (ws) => {
             case 'forceAnimation':
                 console.log(data)
                 entity.forceAnimation = data
+                break
+            case 'startTimer':
+                startTimer(data.time)
+                break
+            case 'stopTimer':
+                stopTimer()
                 break
         }
         

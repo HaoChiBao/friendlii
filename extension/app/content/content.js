@@ -86,6 +86,21 @@ const createFriendliiMenu = () => {
     return edit_menu
 }
 
+const createFriendliiTimer = () => {
+    const timer = document.createElement('div')
+    timer.className = 'friendlii-timer'
+
+    const timer_display = document.createElement('div')
+    timer_display.className = 'friendlii-timer-display'
+    timer_display.innerHTML = '0'
+
+    timer.appendChild(timer_display)
+
+    document.body.appendChild(timer)
+    return timer
+
+}
+
 const createFriendliiUser = (area_element, id) => {
     const friendlii_user = document.createElement('div')
     friendlii_user.className = 'friendlii-entity'
@@ -135,20 +150,20 @@ const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLe
 
     switch(skin){
         case 0:
-            // check if the src is the same
-            if(img.src === await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)) {
-                // do nothing
-            }
-            else {
-                img.src = await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)
-            }
 
             break;
         case 1:
-            path = 'hawkhacks'
+            path = 'hawk'
             break;
         case 2:
             break;
+        }
+    // check if the src is the same
+    if(img.src === await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)) {
+        // do nothing
+    }
+    else {
+        img.src = await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)
     }
 }
 
@@ -164,13 +179,14 @@ const info_element = createFriendliiInfo()
 const area_element = createFriendliiArea()
 const user_element = createFriendliiUser(area_element)
 const menu_element = createFriendliiMenu()
+const timer_element = createFriendliiTimer()
 
 /* 
     0 - default
     1 - hawkhacks
     2 - duck
 */
-let skin = 0 
+let skin = 1
 let id = '' // this will change when the user connects to the server
 
 const openEditMenu = (x, y) => {
@@ -266,6 +282,12 @@ const initiate_WS = async () => {
                     // user_element.style.left = `${data.x}px`
                     // user_element.style.bottom = `${data.y}px`
                     break
+
+                case 'updateTimer':
+                    // console.log('updateTimer:', data)
+                    const timer_display = document.querySelector('.friendlii-timer-display')
+                    timer_display.innerHTML = data.time_elapsed
+
                 default:
                     console.log('Message:', message)
                     break
@@ -411,17 +433,14 @@ const main = async () => {
 
             case 'spawn':
                 break
-            case 'test':
-                console.log('spawn')
-                // const entity = new UserEntity(area_element)
-                // Entity.addKeyControls(entity)
-                // entity.spawn()
-                
-                // Physics.makeEntityDraggable(entity)
-                // Physics.startLoop()
-
-                // const entity = new UserEntity()
-                // Physics.startLoop()
+            case 'startTimer':
+                console.log(data)
+                ws.send(JSON.stringify({
+                    action: 'startTimer',
+                    data: {
+                        time: data
+                    }
+                }))
                 break
 
                 break
