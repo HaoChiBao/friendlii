@@ -43,7 +43,7 @@ const main = async () => {
     startTimer.addEventListener('click', async () => {
         const message = {
             action: 'startTimer',
-            data: 30
+            data: 10
         }
         sendToContent(message)
     })

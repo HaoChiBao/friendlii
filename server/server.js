@@ -281,6 +281,32 @@ wss.on('connection', (ws) => {
             case 'stopTimer':
                 stopTimer()
                 break
+            case 'drawPath':
+                // send to all clients
+                client_rooms[room].clients.forEach((client) => {
+                    if(client === ws) return
+                    client.send(
+                        JSON.stringify({
+                            action: 'drawPath',
+                            data: data,
+                            timeStamp: Date.now()
+                        })
+                    );
+                });
+                break
+            case 'laser':
+                    // send to all clients
+                client_rooms[room].clients.forEach((client) => {
+                    if(client === ws) return
+                    client.send(
+                        JSON.stringify({
+                            action: 'laser',
+                            data: data,
+                            timeStamp: Date.now()
+                        })
+                    );
+                });
+                break
         }
         
         // console.log(`message from client: ${ws.id}`);

@@ -79,8 +79,9 @@
     font-family: 'GTWalsheimPro-Regular', sans-serif;
 
     position: fixed;
-    right: 0;
+    left: 100%;
     top: 0;
+    transform: translateX(-100%);
 
     display: flex;
     justify-content: center;
@@ -89,6 +90,9 @@
     padding: 5px;
     padding-bottom: 0px;
     border-radius: 20px;
+
+    width: 100px;
+    height: 50px;
 
     background-color: #fff;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
@@ -141,4 +145,81 @@
 
 .friendlli-ping-display{
     color: greenyellow !important;
+}
+
+.friendlii-whiteboard.hidden{
+    display: none;
+}
+
+.friendlii-whiteboard{
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    color: white;
+    font-family: 'GTWalsheimPro-Regular', sans-serif;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+    
+    border: black 2px solid;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.friendlii-whiteboard .friendlii-whiteboard-toptab{
+    height: 20px;
+    width: 500px;
+    background-color: black;
+}
+
+.friendlii-whiteboard-tools {
+    position: absolute;
+    bottom: -30px;
+    left: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.friendlii-whiteboard-tool.active {
+    opacity: 1;
+    transform: translateY(-10px);
+}
+.friendlii-whiteboard-tool {
+    width: 20px;
+    height: 80px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    outline: none;
+    background-color: transparent;
+    border: none;
+
+    cursor: pointer;
+    
+    /* padding: 10px; */
+    transition: ease 0.4s;
+    opacity: 0.5;
+}
+
+.friendlii-whiteboard-tool:hover {
+    transform: translateY(-10px);
+    opacity: 1;
+}
+
+.friendlii-whiteboard-tool img{
+    transform: rotate(135deg);
+    width: 50px;
+    pointer-events: none;
+
 }
