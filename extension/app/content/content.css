@@ -256,3 +256,17 @@
     pointer-events: none;
 
 }
+
+.friendlii-blocked{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 2147483647;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

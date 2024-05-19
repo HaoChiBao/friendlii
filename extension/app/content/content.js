@@ -529,7 +529,9 @@ const initiate_WS = async () => {
                     const timer_display = document.querySelector('.friendlii-timer-display')
                     const minutes = Math.floor(data.time_elapsed / 60)
                     const seconds = data.time_elapsed % 60
+                    // save time elapsed to chrome local storage
                     timer_display.innerHTML = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+                    await chrome.storage.local.set({friendlii_time_elapsed: data.time_elapsed})
                     break
                 case 'drawPath':
                     drawpaths = data
@@ -559,8 +561,33 @@ const initiate_WS = async () => {
     }
 }
 
+const blockWebsite = () => {
+    const blocked = document.createElement('div')
+    blocked.className = 'friendlii-blocked'
+    const img = document.createElement('img')
+    img.src = chrome.runtime.getURL('images/banned.png')
+    blocked.appendChild(img)
+
+    document.body.appendChild(blocked)
+}
+
 // received message from server worker
 const main = async () => {
+
+    const bannedWebsites = ['https://www.facebook.com/', 'https://www.instagram.com/', 'https://www.reddit.com/', 'https://www.twitter.com/']
+    const currentWebsite = window.location.href
+    if(bannedWebsites.includes(currentWebsite)){
+        // get time elapsed from chrome local storage
+        const data = await chrome.storage.local.get('friendlii_time_elapsed')
+        const time_elapsed = data.friendlii_time_elapsed
+        if(time_elapsed !== undefined){
+
+            if(time_elapsed > 0){
+                blockWebsite()
+            }
+
+        }
+    }
 
     const keyControls = {
         'up': 0,
