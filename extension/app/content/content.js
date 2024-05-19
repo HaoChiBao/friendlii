@@ -125,7 +125,7 @@ const createFriendliiTimer = () => {
 
     const timer_display = document.createElement('div')
     timer_display.className = 'friendlii-timer-display'
-    timer_display.innerHTML = '0'
+    timer_display.innerHTML = '0:00'
 
     timer.appendChild(timer_display)
 
@@ -163,10 +163,18 @@ const renderDrawPath = (ctx) => {
 const createWhiteboard = () => {
     const whiteboard = document.createElement('div')
     whiteboard.className = 'friendlii-whiteboard'
+    whiteboard.classList.add('minimized')
 
     const toptab = document.createElement('div')
     toptab.className = 'friendlii-whiteboard-toptab'
     whiteboard.appendChild(toptab)
+
+    const minimizeBtn = document.createElement('button')
+    minimizeBtn.innerHTML = 'x'
+    toptab.appendChild(minimizeBtn)
+    minimizeBtn.addEventListener('click', () => {
+        whiteboard.classList.toggle('minimized')
+    })
 
     const canvas = document.createElement('canvas')
     canvas.style.cursor = 'crosshair'
@@ -210,6 +218,8 @@ const createWhiteboard = () => {
             ctx.arc(x, y, 3, 0, 2 * Math.PI)
             ctx.stroke()
 
+            if (ws === null) return
+            if (ws.readyState !== 1) return
             ws.send(JSON.stringify({
                 action: 'laser',
                 data: {x, y}
@@ -244,6 +254,8 @@ const createWhiteboard = () => {
 
     const mouseUp = (e) => {
         isDrawing = false
+        if (ws === null) return
+        if (ws.readyState !== 1) return
         ws.send(JSON.stringify({
             action: 'drawPath',
             data: drawpaths,
@@ -398,7 +410,7 @@ const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLe
 // websocket connection
 
 let serverAddress = 'wss://friendlii-470eb93cf55e.herokuapp.com/';
-serverAddress = 'ws://localhost:3000/';
+// serverAddress = 'ws://localhost:3000/';
 let ws = null;
 
 // elements
@@ -515,7 +527,9 @@ const initiate_WS = async () => {
                 case 'updateTimer':
                     // console.log('updateTimer:', data)
                     const timer_display = document.querySelector('.friendlii-timer-display')
-                    timer_display.innerHTML = data.time_elapsed
+                    const minutes = Math.floor(data.time_elapsed / 60)
+                    const seconds = data.time_elapsed % 60
+                    timer_display.innerHTML = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`
 
                 case 'drawPath':
                     drawpaths = data
@@ -675,7 +689,9 @@ const main = async () => {
             case 'spawn':
                 break
             case 'startTimer':
-                console.log(data)
+                if (ws === null) return
+                if (ws.readyState !== 1) return
+                // console.log(data)
                 ws.send(JSON.stringify({
                     action: 'startTimer',
                     data: {
