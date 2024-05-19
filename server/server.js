@@ -39,6 +39,9 @@ class UserEntity extends Entity {
         this.ws = ws
 
         this.skin = skin
+        
+        this.forceAnimation = null
+
         this.animationFrame = 0
         this.facingLeft = true
     }
@@ -76,18 +79,23 @@ class UserPhysics extends Physics{
                 // }))
                 if(this.velocity.x > 0) this.user_entity.facingLeft = false
                 if(this.velocity.x < 0) this.user_entity.facingLeft = true
-                // console.log(this.user_entity.facingLeft)
-
+                
+                
                 if(this.hasEntityAbove()){
                     this.user_entity.animationFrame = 1
+                    this.user_entity.forceAnimation = null
                 }else if(this.hasEntityLeft()){
                     this.user_entity.animationFrame = 2
-                    this.facingLeft = true
+                    this.user_entity.facingLeft = true
                 }else if(this.hasEntityRight()){
                     this.user_entity.animationFrame = 2
-                    this.facingLeft = false
+                    this.user_entity.facingLeft = false
                 } else {
                     this.user_entity.animationFrame = 0
+                    if(this.velocity.x >= 100) this.user_entity.forceAnimation = null
+                    if(this.user_entity.forceAnimation !== null){
+                        this.user_entity.animationFrame = this.user_entity.forceAnimation
+                    }
                 }
 
             } catch(e) {
@@ -203,6 +211,10 @@ wss.on('connection', (ws) => {
                 break
             case 'connect':
                 entity.skin = data.skin
+                break
+            case 'forceAnimation':
+                console.log(data)
+                entity.forceAnimation = data
                 break
         }
         

@@ -52,6 +52,31 @@ const createFriendliiMenu = () => {
     const sadBtn = document.createElement('button')
     sadBtn.innerHTML = '😢'
 
+    const sendEmote = (emote) => {
+        console.log('Emote:', emote)
+        try {
+            if(ws === null) return
+            if(ws.readyState !== 1) return
+
+            ws.send(JSON.stringify({
+                action: 'forceAnimation',
+                data: emote
+            }))
+
+        } catch (error) {
+            console.log('Error:', error)
+        }
+    
+    }
+
+    angryBtn.addEventListener('click', () => {
+        sendEmote(3)
+    })
+
+    sadBtn.addEventListener('click', () => {
+        sendEmote(4)  
+    })
+
     edit_menu.appendChild(chatBtn)
     edit_menu.appendChild(angryBtn)
     edit_menu.appendChild(happyBtn)
@@ -101,7 +126,6 @@ const setConnectedStatus = (status) => {
 }
 
 
-// change animation frame
 const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLeft = true) => {
     const img = element.querySelector('img')
     let path = 'default'
@@ -112,8 +136,12 @@ const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLe
     switch(skin){
         case 0:
             // check if the src is the same
-            if(img.src === await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)) return
-            else img.src = await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)
+            if(img.src === await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)) {
+                // do nothing
+            }
+            else {
+                img.src = await chrome.runtime.getURL(`images/animations/${path}/${path}${animationFrame}.gif`)
+            }
 
             break;
         case 1:
