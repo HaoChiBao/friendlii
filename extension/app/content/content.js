@@ -15,6 +15,10 @@ const createFriendliiInfo = () => {
     connected_indicator.className = 'friendlii-connected-indicator'
     connected_indicator.innerHTML = 'NOT connected'
 
+    const user_selected = document.createElement('div')
+    user_selected.className = 'friendlii-user-selected'
+    user_selected.innerHTML = 'User NOT Selected'
+
     const users_amount = document.createElement('div')
     users_amount.className = 'friendlii-users-amount'
     users_amount.innerHTML = 'Users: 0'
@@ -25,10 +29,36 @@ const createFriendliiInfo = () => {
 
     information.appendChild(connected_indicator)
     information.appendChild(users_amount)
+    information.appendChild(user_selected)
     information.appendChild(ping_display)
 
     document.body.appendChild(information)
     return information
+}
+
+const createFriendliiMenu = () => {
+    const edit_menu = document.createElement('div')
+    edit_menu.className = 'friendlii-edit-menu'
+
+    const chatBtn = document.createElement('button')
+    chatBtn.innerHTML = '🗣️'
+
+    const angryBtn = document.createElement('button')
+    angryBtn.innerHTML = '🔥'
+
+    const happyBtn = document.createElement('button')
+    happyBtn.innerHTML = '😄'
+
+    const sadBtn = document.createElement('button')
+    sadBtn.innerHTML = '😢'
+
+    edit_menu.appendChild(chatBtn)
+    edit_menu.appendChild(angryBtn)
+    edit_menu.appendChild(happyBtn)
+    edit_menu.appendChild(sadBtn)
+
+    document.body.appendChild(edit_menu)
+    return edit_menu
 }
 
 const createFriendliiUser = (area_element, id) => {
@@ -43,6 +73,7 @@ const createFriendliiUser = (area_element, id) => {
     area_element.appendChild(friendlii_user)
     return friendlii_user
 }
+
 
 let pings = [/* average of 10 pings */]
 let max_pings = 10
@@ -74,7 +105,7 @@ const setConnectedStatus = (status) => {
 const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLeft = true) => {
     const img = element.querySelector('img')
     let path = 'default'
-    console.log(facingLeft)
+    // console.log(facingLeft)
     if (!facingLeft) element.style.transform = 'scaleX(-1)'
     else element.style.transform = 'scaleX(1)'
 
@@ -104,6 +135,8 @@ let ws = null;
 const info_element = createFriendliiInfo()
 const area_element = createFriendliiArea()
 const user_element = createFriendliiUser(area_element)
+const menu_element = createFriendliiMenu()
+
 /* 
     0 - default
     1 - hawkhacks
@@ -111,6 +144,16 @@ const user_element = createFriendliiUser(area_element)
 */
 let skin = 0 
 let id = '' // this will change when the user connects to the server
+
+const openEditMenu = (x, y) => {
+    menu_element.style.display = 'block'
+    if(x) menu_element.style.left = `${x}px`
+    if(y) menu_element.style.top = `${y}px`
+}
+
+const closeEditMenu = () => {
+    menu_element.style.display = 'none'
+}
 
 const hideUser_elements = () => {area_element.style.display = 'none'}
 const showUser_elements = () => {area_element.style.display = 'block'}
@@ -228,20 +271,24 @@ const main = async () => {
         e.preventDefault()
 
         console.log('User Clicked')
-        userActive = !userActive
-        if(userActive){
-            user_element.style.border = '#8eb4ff 2px solid'
-        } else {
-            user_element.style.border = '#ffa2a2 2px solid'
+        if(!userActive){ //first click
+            const user_selected = document.querySelector('.friendlii-user-selected')
+            user_selected.innerHTML = `User Selected`
+        } else { //second click
+            openEditMenu(user_element.offsetLeft - 30, user_element.offsetTop - 30)
         }
+        userActive = true
     })
     
     window.addEventListener('click', () => {
         userActive = false
-        user_element.style.border = '#ffa2a2 2px solid'
+        const user_selected = document.querySelector('.friendlii-user-selected')
+        user_selected.innerHTML = `User NOT Selected`
+        closeEditMenu()
     })
 
     window.addEventListener('keydown', (e) => {
+        closeEditMenu()
         if (!userActive) return
         e.preventDefault()
         const key = e.key.toLowerCase();

@@ -78,6 +78,18 @@ class UserPhysics extends Physics{
                 if(this.velocity.x < 0) this.user_entity.facingLeft = true
                 // console.log(this.user_entity.facingLeft)
 
+                if(this.hasEntityAbove()){
+                    this.user_entity.animationFrame = 1
+                }else if(this.hasEntityLeft()){
+                    this.user_entity.animationFrame = 2
+                    this.facingLeft = true
+                }else if(this.hasEntityRight()){
+                    this.user_entity.animationFrame = 2
+                    this.facingLeft = false
+                } else {
+                    this.user_entity.animationFrame = 0
+                }
+
             } catch(e) {
                 console.log(e)
             }

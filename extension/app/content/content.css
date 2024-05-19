@@ -58,6 +58,44 @@
     border-radius: 10px;
 }
 
+.friendlii-edit-menu{
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    display: none;
+
+    padding: 5px;
+    padding-bottom: 0px;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.504);
+    backdrop-filter: blur(10px);
+}
+
+.friendlii-edit-menu button{
+    background-color: rgb(235, 235, 235);
+    opacity: 0.5;
+    color: white;
+    border: none;
+    outline: none;
+    
+    width: 22px;
+    height: 22px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    border-radius: 50%;
+    
+    margin-bottom: 5px;
+    
+    cursor: pointer;
+}
+.friendlii-edit-menu button:hover{
+    opacity: 1;
+}
+
 .friendlii-information{
     position: fixed;
     top: 0;

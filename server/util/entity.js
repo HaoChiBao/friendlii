@@ -18,6 +18,7 @@ class Physics {
 
     // i could take the time to add friction and air resistance but i don't want to
     static coefficient_of_resistance = 0.99;
+    static coefficient_of_resistance = 0.94;
     
     // physics setInterval
     static interval = null;
@@ -384,6 +385,27 @@ class Physics {
         const allCollisions = this.collidesWith([this.#entity], this.position.x, this.position.y - 1, this.position.x, this.position.y)
         if(allCollisions.length > 0) return true
 
+        return false
+    }
+
+    hasEntityAbove() {
+        // check if the entity is colliding with the entity directly above it
+        const allCollisions = this.collidesWith([this.#entity], this.position.x, this.position.y + 5, this.position.x, this.position.y)
+        if(allCollisions.length > 0) return true
+        return false
+    }
+
+    hasEntityLeft() {
+        // check if the entity is colliding with the entity directly to the left of it
+        const allCollisions = this.collidesWith([this.#entity], this.position.x - 5, this.position.y, this.position.x, this.position.y)
+        if(allCollisions.length > 0) return true
+        return false
+    }
+
+    hasEntityRight() {
+        // check if the entity is colliding with the entity directly to the right of it
+        const allCollisions = this.collidesWith([this.#entity], this.position.x + 5, this.position.y, this.position.x, this.position.y)
+        if(allCollisions.length > 0) return true
         return false
     }
 
