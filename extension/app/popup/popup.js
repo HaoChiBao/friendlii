@@ -106,6 +106,11 @@ const main = async () => {
         const message = {action: 'pauseTimer'}
         sendToContent(message)
     })
+
+    const redirectBS = document.querySelector('#redirectBS')
+    redirectBS.addEventListener('click', async () => {
+        window.location.href = './pages/blockSites/blockSites.html'
+    })
 }
 
 main()

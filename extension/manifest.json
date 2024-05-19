@@ -20,12 +20,12 @@
         "type": "module"
     },
     "icons": {
-        "16": "./images/default_icon.png",
-        "48": "./images/default_icon.png",
-        "128": "./images/default_icon.png"
+        "16": "./images/preview (2).png",
+        "48": "./images/preview (2).png",
+        "128": "./images/preview (2).png"
     },
     "action": {
-        "default_popup": "./app/popup/popup.html"
+        "default_popup": "./app/popup/pages/landing/landing.html"
     },
     "content_scripts": [
         {

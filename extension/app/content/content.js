@@ -410,7 +410,7 @@ const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLe
 // websocket connection
 
 let serverAddress = 'wss://friendlii-470eb93cf55e.herokuapp.com/';
-serverAddress = 'ws://localhost:3000/';
+// serverAddress = 'ws://localhost:3000/';
 let ws = null;
 
 // elements

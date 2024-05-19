@@ -1,0 +1,58 @@
+@font-face {font-family: 'GTWalsheimPro-Regular';src: url('https://cdn.shopify.com/s/files/1/0588/4228/4186/files/GTWalsheimPro-Regular.woff?v=1669253354') format('woff');} 
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'GTWalsheimPro-Regular', sans-serif;
+}
+
+body {
+    --var-sizing: 16px;
+
+    height: calc(461px - var(--var-sizing)*2);
+    width: calc(252px - var(--var-sizing)*2);
+
+    /* height: calc(161px - var(--var-sizing)*2);
+    width: calc(161px - var(--var-sizing)*2); */
+
+    padding: var(--var-sizing);
+    /* padding-top: 0; */
+
+    background-color: #fff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transition: 0.5s ease;
+
+    /* resize: both; */
+}
+
+img {
+    width: calc(252px - var(--var-sizing)*2);
+    height: auto;
+}
+
+button{
+    /* get rid of default button css */
+    position: absolute;
+    bottom: 0;
+
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: calc(100% - 20px);
+    height: 40px;
+    
+    background-color: #dadada;
+    border-radius: 20px;
+
+    margin-bottom: 10px;
+    transition: 0.5s ease;
+}
+button:hover{
+    background-color: #a9e9ff;
+    transform: scale(1.05) translateY(-5px); ;
+}
