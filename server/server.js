@@ -18,6 +18,7 @@ const client_rooms = {
         timer:{
             loop: null,
             time_elapsed: 0,
+            paused: false,
         },
         clients: [
             // list of client ids
@@ -189,11 +190,10 @@ class UserPhysics extends Physics{
 
 const startTimer = (time) => {
     clearInterval(client_rooms.defaultRoom.timer.loop)
-
-    if(client_rooms.defaultRoom.timer.loop !== null) return
     client_rooms.defaultRoom.timer.time_elapsed = time
 
     client_rooms.defaultRoom.timer.loop = setInterval(() => {
+        if(client_rooms.defaultRoom.timer.paused) return
 
         client_rooms.defaultRoom.timer.time_elapsed -= 1
 
@@ -219,25 +219,8 @@ const startTimer = (time) => {
 
 }
 
-const stopTimer = () => {
-    if(client_rooms.defaultRoom.timer.loop === null) return
-
-    clearInterval(client_rooms.defaultRoom.timer.loop)
-    client_rooms.defaultRoom.timer.loop = null
-    client_rooms.defaultRoom.timer.time_elapsed = 0
-
-    client_rooms.defaultRoom.clients.forEach((client) => {
-        client.send(
-            JSON.stringify({
-                // action: 'timer',
-                // data: {
-                //     time_elapsed: client_rooms.defaultRoom.timer.time_elapsed,
-                //     max_time: client_rooms.defaultRoom.timer.max_time,
-                // },
-                // timeStamp: Date.now()
-            })
-        );
-    });
+const pauseTimer = () => {
+    client_rooms.defaultRoom.timer.paused = !client_rooms.defaultRoom.timer.paused
 }
 
 // WebSocket connection handling
@@ -276,10 +259,11 @@ wss.on('connection', (ws) => {
                 entity.forceAnimation = data
                 break
             case 'startTimer':
+                console.log(data.time)
                 startTimer(data.time)
                 break
-            case 'stopTimer':
-                stopTimer()
+            case 'pauseTimer':
+                pauseTimer()
                 break
             case 'drawPath':
                 // send to all clients

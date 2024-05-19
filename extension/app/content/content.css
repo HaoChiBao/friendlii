@@ -59,6 +59,7 @@
 }
 
 .friendlii-edit-menu{
+    z-index: 2147483647;
     position: fixed;
     left: 0;
     top: 0;
@@ -73,7 +74,7 @@
 }
 
 .friendlii-timer{
-
+    z-index: 2147483647;
     display: flex;
     color: black;
     font-family: 'GTWalsheimPro-Regular', sans-serif;
@@ -161,6 +162,7 @@
 }
 
 .friendlii-whiteboard{
+    z-index: 2147483647;
     position: fixed;
     top: 40px;
     left: 100%;

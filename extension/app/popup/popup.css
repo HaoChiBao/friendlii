@@ -9,11 +9,11 @@
 body {
     --var-sizing: 16px;
 
-    /* height: calc(561px - var(--var-sizing)*2);
-    width: calc(322px - var(--var-sizing)*2); */
+    height: calc(461px - var(--var-sizing)*2);
+    width: calc(252px - var(--var-sizing)*2);
 
-    height: calc(161px - var(--var-sizing)*2);
-    width: calc(161px - var(--var-sizing)*2);
+    /* height: calc(161px - var(--var-sizing)*2);
+    width: calc(161px - var(--var-sizing)*2); */
 
     padding: var(--var-sizing);
     /* padding-top: 0; */
@@ -28,4 +28,132 @@ body {
     transition: 0.5s ease;
 
     /* resize: both; */
+}
+
+footer {
+    /* position: absolute;
+    bottom: 0; */
+    width: 100%;
+    height: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+footer #connect{
+    /* get rid of default button css */
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    
+    background-color: #90e9ff;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+footer #connect:hover{
+    background-color: #a9e9ff;
+}
+footer #disconnect{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    aspect-ratio: 1/1;
+    height: 100%;
+    background-color: #cacaca;
+    border-radius: 20px;
+    /* margin: 10px; */
+    margin-left: 0;
+}
+footer #disconnect:hover{
+    background-color: #dadada;
+    color: red;
+}
+
+#choices{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#choices button{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    aspect-ratio: 1/1;
+    
+    width: 100%;
+    
+    background-color: #eaeaea;
+    overflow: hidden;
+    
+    border-radius: 10px;
+    
+    padding: 5px;
+    border: 2px solid #ffffff;
+}
+
+#choices button:hover{
+    border: 2px solid #000;
+}
+#choices button.selected{
+    border: 2px solid #000;
+}
+
+#choices button img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#timers {
+    height: 100%;
+    width: 100%;
+    margin-top: 10px;
+
+    /* wrap */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#timers button{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    
+    width: calc(50% - 5px);
+    
+    background-color: #eaeaea;
+    overflow: hidden;
+    
+    border-radius: 10px;
+    
+    padding: 5px;
+    border: 2px solid #ffffff;
+}
+
+#timers button:hover{
+    border: 2px solid #000;
+}
+
+#pauseTimer{
+    width: 100%;
+    height: 50px;
+    margin-top: 10px;
+
+    border-radius: 20px;
+
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+#pauseTimer:hover{
+    background-color: rgb(255, 95, 95);
+    color: white;
 }

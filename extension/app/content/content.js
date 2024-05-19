@@ -363,7 +363,7 @@ const setPing = (ping) => {
         const average = sum / pings.length
 
         const ping_display = document.querySelector('.friendlli-ping-display')
-        ping_display.innerHTML = `Ping: ${average.toFixed(2)}`
+        ping_display.innerHTML = `Ping: ${Math.round(average)}`
 
         pings = []
     }
@@ -410,7 +410,7 @@ const setAnimationFrame = async (element, animationFrame = 0, skin = 0, facingLe
 // websocket connection
 
 let serverAddress = 'wss://friendlii-470eb93cf55e.herokuapp.com/';
-// serverAddress = 'ws://localhost:3000/';
+serverAddress = 'ws://localhost:3000/';
 let ws = null;
 
 // elements
@@ -427,7 +427,7 @@ const whiteboard_context = whiteboard_element.querySelector('canvas').getContext
     1 - hawkhacks
     2 - duck
 */
-let skin = 1
+let skin = 0
 let id = '' // this will change when the user connects to the server
 
 const openEditMenu = (x, y) => {
@@ -530,7 +530,7 @@ const initiate_WS = async () => {
                     const minutes = Math.floor(data.time_elapsed / 60)
                     const seconds = data.time_elapsed % 60
                     timer_display.innerHTML = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`
-
+                    break
                 case 'drawPath':
                     drawpaths = data
                     renderDrawPath(whiteboard_context)
@@ -679,6 +679,7 @@ const main = async () => {
 
         switch (action) {
             case 'connect':
+                skin = data.skin
                 initiate_WS()
                 break
 
@@ -698,6 +699,14 @@ const main = async () => {
                         time: data
                     }
                 }))
+                break
+            case 'pauseTimer':
+                if (ws === null) return
+                if (ws.readyState !== 1) return
+                ws.send(JSON.stringify({
+                    action: 'pauseTimer'
+                }))
+
                 break
 
                 break

@@ -25,7 +25,7 @@ class Physics {
 
     // the entity that this physics object is attached to
     #entity
-    constructor(entity, doesCollide = true, isStatic = false, window = {x: 1000, y: 1000}) {
+    constructor(entity, doesCollide = true, isStatic = false, window = {x: 2000, y: 2000}) {
         
         console.log('Physics Constructed')
         this.#entity = entity;
